@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 import java.time.LocalDateTime;
 
@@ -17,7 +18,8 @@ public class HelloWebClientController {
     private RestTemplate restTemplate;
 
     @GetMapping("/")
-    @HystrixCommand(fallbackMethod = "failed")
+    @HystrixCommand(fallbackMethod = "failed", commandProperties = {
+            @HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "1000")})
     public String handleRequest(Model model) {
         //accessing hello-service
         HelloObject helloObject = restTemplate.getForObject("http://hello-service/hello", HelloObject.class);
@@ -29,6 +31,6 @@ public class HelloWebClientController {
     public String failed(Model model) {
     	
     	System.out.println("failed");
-    	return "hello-page";
+    	return "failed";
     }
 }

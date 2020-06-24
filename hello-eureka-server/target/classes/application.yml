@@ -6,3 +6,11 @@ eureka:
   client:
     registerWithEureka: false
     fetchRegistry: false
+    
+management:
+  security:
+    enabled: false
+spring:
+  boot:
+    admin:
+      context-path: /admin  #A different context path for Spring boot admin server has been provided avoiding conflict with eureka
